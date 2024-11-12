@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Data Monitoring</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .data-section {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-time Data Monitoring</h1>
+    <div class="data-section">
+        <h2>Pangyo Data</h2>
+        <p id="pangyoData">Waiting for data...</p>
+    </div>
+    <div class="data-section">
+        <h2>Busan Data</h2>
+        <p id="busanData">Waiting for data...</p>
+    </div>
+
+    <script>
+        // Pangyo 데이터 스트림
+        const pangyoSource = new EventSource("http://127.0.0.1:8000/streamPangyo");
+        pangyoSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            document.getElementById("pangyoData").innerText = `
+                Temperature: ${data.temperature} °F
+                Humidity: ${data.humidity} %
+                UPS Temperature: ${data.ups_temperature} °C
+                Power Usage: ${data.power_usage} W
+                Battery Health: ${data.battery_health}
+            `;
+        };
+        pangyoSource.onerror = function() {
+            document.getElementById("pangyoData").innerText = "Error receiving Pangyo data.";
+        };
+
+        // Busan 데이터 스트림
+        const busanSource = new EventSource("http://127.0.0.1:8000/streamBusan");
+        busanSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            document.getElementById("busanData").innerText = `
+                Temperature: ${data.temperature} °F
+                Humidity: ${data.humidity} %
+                UPS Temperature: ${data.ups_temperature} °C
+                Power Usage: ${data.power_usage} W
+                Battery Health: ${data.battery_health}
+            `;
+        };
+        busanSource.onerror = function() {
+            document.getElementById("busanData").innerText = "Error receiving Busan data.";
+        };
+    </script>
+</body>
+</html>
