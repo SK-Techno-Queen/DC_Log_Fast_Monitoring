@@ -11,6 +11,7 @@
 <br>
 
 ## FastAPI 실행 명령어
+
 '''
 uvicorn main:app --reload
 '''
@@ -19,6 +20,7 @@ uvicorn main:app --reload
 <br>
 
 ## pip install 해야하는 것
+
 '''
 pip install fastapi uvicorn psycopg2
 '''
